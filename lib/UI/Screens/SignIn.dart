@@ -41,7 +41,6 @@ class _SigninState extends State<Signin> {
       );
 
       if (response.user != null) {
-        // Successful login
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return const Welocomescreen();
         }));
@@ -168,9 +167,6 @@ class _SigninState extends State<Signin> {
                   const SnackBar(content: Text('Processing Data')),
                 );
                 _signInWithSupabase();
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const Welocomescreen();
-                }));
               }
             },
           ),
