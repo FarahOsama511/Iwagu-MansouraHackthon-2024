@@ -1,8 +1,8 @@
-import 'package:deaf/UI/Screens/Joinscreen.dart';
 import 'package:deaf/UI/Screens/Welocomescreen.dart';
 import 'package:deaf/UI/Widgets/Textfields.dart';
 import 'package:deaf/UI/Widgets/buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -12,7 +12,57 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool obscuretext = true;
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _signInWithSupabase() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fill in all fields."),
+        ),
+      );
+      return;
+    }
+
+    try {
+      final response = await Supabase.instance.client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      if (response.user != null) {
+        // Successful login
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return const Welocomescreen();
+        }));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response.error?.message ?? 'Unknown error occurred'),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+        ),
+      );
+    }
+  }
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,50 +95,66 @@ class _SigninState extends State<Signin> {
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Text(
-              "Email",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700),
+          Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Text(
+                    "Email",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+                Textfield(
+                  controller: _emailController,
+                  obscureText: false,
+                  hint: "Example@Gmail.com",
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Text(
+                    "Password",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+                Textfield(
+                  controller: _passwordController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                  obscureText: obscuretext,
+                  hint: "Passowrd",
+                  obscuringchar: "*",
+                  suffix: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          obscuretext = !obscuretext;
+                        });
+                      },
+                      icon: obscuretext
+                          ? const Icon(
+                              Icons.visibility_off,
+                            )
+                          : const Icon(
+                              Icons.visibility,
+                            )),
+                ),
+              ],
             ),
-          ),
-          Textfield(
-            obscureText: false,
-            hint: "Example@Gmail.com",
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Text(
-              "Password",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
-          Textfield(
-            obscureText: obscuretext,
-            hint: "Passowrd",
-            obscuringchar: "*",
-            suffix: IconButton(
-                onPressed: () {
-                  setState(() {
-                    obscuretext = !obscuretext;
-                  });
-                },
-                icon: obscuretext
-                    ? const Icon(
-                        Icons.visibility_off,
-                      )
-                    : const Icon(
-                        Icons.visibility,
-                      )),
           ),
           const SizedBox(
             height: 30,
@@ -96,9 +162,16 @@ class _SigninState extends State<Signin> {
           button(
             title: "Sign In",
             onpressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return Welocomescreen();
-              }));
+              print("$_emailController");
+              if (_formKey.currentState!.validate()) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Processing Data')),
+                );
+                _signInWithSupabase();
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const Welocomescreen();
+                }));
+              }
             },
           ),
           const SizedBox(
@@ -109,4 +182,8 @@ class _SigninState extends State<Signin> {
       ),
     );
   }
+}
+
+extension on AuthResponse {
+  get error => null;
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Textfield extends StatelessWidget {
@@ -11,7 +10,8 @@ class Textfield extends StatelessWidget {
   String? Function(String?)? validator;
 
   Textfield(
-      {required this.obscureText,
+      {super.key,
+      required this.obscureText,
       this.obscuringchar,
       this.suffix,
       this.controller,
@@ -23,7 +23,7 @@ class Textfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         height: 60,
         child: TextFormField(
@@ -31,7 +31,7 @@ class Textfield extends StatelessWidget {
           // validator: validator,
           // onEditingComplete: onEdit,
           controller: controller,
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
           cursorColor: Colors.black,
           obscureText: obscureText,
           obscuringCharacter: obscuringchar ?? "*",
@@ -39,7 +39,7 @@ class Textfield extends StatelessWidget {
             suffix: suffix,
             hintText: hint,
             hintStyle:
-                TextStyle(color: const Color.fromARGB(255, 138, 137, 137)),
+                const TextStyle(color: Color.fromARGB(255, 138, 137, 137)),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),

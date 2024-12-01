@@ -51,7 +51,7 @@ class _WelocomescreenState extends State<Welocomescreen> {
               title: "Sign Up",
               onpressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return Joinscreen();
+                  return const Joinscreen();
                 }));
               }),
           const SizedBox(
@@ -71,7 +71,7 @@ class _WelocomescreenState extends State<Welocomescreen> {
             title: "Sign In",
             onpressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return Signin();
+                return const Signin();
               }));
             },
           )

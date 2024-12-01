@@ -15,10 +15,10 @@ class _buttonState extends State<button> {
     return Padding(
       padding: const EdgeInsets.all(15),
       child: MaterialButton(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          color: Color(0xFF0054B5),
+          color: const Color(0xFF0054B5),
           onPressed: widget.onpressed,
           child: Center(
             child: Text(

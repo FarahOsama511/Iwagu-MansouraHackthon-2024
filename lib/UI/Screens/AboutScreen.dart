@@ -55,7 +55,7 @@ class Aboutscreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Center(
@@ -69,11 +69,11 @@ class Aboutscreen extends StatelessWidget {
             height: 10,
           ),
           Container(
-              padding: EdgeInsets.only(left: 300),
+              padding: const EdgeInsets.only(left: 300),
               child: MaterialButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return Welocomescreen();
+                    return const Welocomescreen();
                   }));
                 },
                 child: const Text(

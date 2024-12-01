@@ -10,7 +10,7 @@ class Openingscreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(
-              padding: EdgeInsets.only(top: 50, left: 50, right: 50),
+              padding: const EdgeInsets.only(top: 50, left: 50, right: 50),
               child: Image.asset("assets/images/Group 1.png")),
           Container(
             width: double.infinity,
@@ -119,11 +119,11 @@ class Openingscreen extends StatelessWidget {
             height: 10,
           ),
           Container(
-            padding: EdgeInsets.only(left: 320),
+            padding: const EdgeInsets.only(left: 320),
             child: MaterialButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return Aboutscreen();
+                  return const Aboutscreen();
                 }));
               },
               child: const Text(

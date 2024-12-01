@@ -5,7 +5,10 @@ class Containers extends StatelessWidget {
   String title;
   String subtitle;
   Containers(
-      {required this.title, required this.subtitle, required this.image});
+      {super.key,
+      required this.title,
+      required this.subtitle,
+      required this.image});
 
   @override
   Widget build(BuildContext context) {
